@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>We've Moved</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <h1>We've Moved!</h1>
+            <p>We're excited to let you know that we've shifted to a new home.</p>
+            <p class="subtitle">Visit us at our new location:</p>
+            <a href="https://sealedspace.com" class="cta-button">Go to Sealed Space →</a>
+            <p class="footer-text">You'll be redirected automatically in <span id="countdown">10</span> seconds...</p>
+        </div>
+    </div>
+    <script>
+        let seconds = 10;
+        const countdownElement = document.getElementById('countdown');
+        
+        const interval = setInterval(() => {
+            seconds--;
+            countdownElement.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(interval);
+                window.location.href = 'https://sealedspace.com';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
