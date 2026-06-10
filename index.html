@@ -1,44 +1,454 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noteqo is now Sealed Space</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>noteqo is now SealedSpace</title>
+  <meta name="description" content="noteqo has been rebranded to SealedSpace — the same zero-knowledge, end-to-end encrypted workspace, with a new name. You'll be redirected automatically." />
+
+  <!-- Open Graph / social -->
+  <meta property="og:title" content="noteqo is now SealedSpace" />
+  <meta property="og:description" content="Same private, end-to-end encrypted workspace. New name. We've moved to sealedspace.com." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sealedspace.com" />
+
+  <!-- Auto-redirect fallback if JS is disabled (kept long enough to read the page). -->
+  <noscript>
+    <meta http-equiv="refresh" content="8; url=https://sealedspace.com" />
+  </noscript>
+
+  <style>
+    :root {
+      --bg: #0a0b0f;
+      --bg-elevated: #12141c;
+      --surface: rgba(255, 255, 255, 0.04);
+      --surface-border: rgba(255, 255, 255, 0.08);
+      --text: #f4f5f7;
+      --text-muted: #9aa0ad;
+      --text-faint: #656b78;
+      --accent: #4ade80;          /* sealed-green */
+      --accent-strong: #22c55e;
+      --accent-dim: rgba(74, 222, 128, 0.12);
+      --radius: 18px;
+      --radius-sm: 11px;
+      --shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.65);
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--text);
+      background: var(--bg);
+      background-image:
+        radial-gradient(1100px 600px at 15% -10%, rgba(74, 222, 128, 0.10), transparent 60%),
+        radial-gradient(900px 500px at 95% 0%, rgba(99, 102, 241, 0.10), transparent 55%),
+        radial-gradient(800px 800px at 50% 120%, rgba(34, 197, 94, 0.06), transparent 60%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 32px 20px;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      background: linear-gradient(180deg, var(--bg-elevated), var(--bg));
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(28px, 5vw, 52px);
+      overflow: hidden;
+      animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    /* subtle top sheen */
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(74, 222, 128, 0.22);
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+    .eyebrow .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+      animation: pulse 2s infinite;
+    }
+
+    /* brand transition row */
+    .brands {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 19px;
+      font-weight: 600;
+    }
+    .brand .glyph {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 18px;
+      flex: none;
+    }
+    .brand.old { color: var(--text-faint); }
+    .brand.old .name {
+      text-decoration: line-through;
+      text-decoration-color: var(--text-faint);
+    }
+    .brand.old .glyph {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      color: var(--text-muted);
+    }
+    .brand.new { color: var(--text); }
+    .brand.new .glyph {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #042b13;
+      box-shadow: 0 6px 18px -6px rgba(34, 197, 94, 0.7);
+    }
+    .arrow {
+      color: var(--text-faint);
+      flex: none;
+      display: grid;
+      place-items: center;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 38px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      margin: 0 0 14px;
+    }
+    h1 .accent { color: var(--accent); }
+
+    p.lead {
+      font-size: 16.5px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin: 0 0 28px;
+    }
+
+    .reassure {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 480px) {
+      .reassure { grid-template-columns: 1fr; }
+    }
+    .reassure li {
+      list-style: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius-sm);
+      padding: 13px 14px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .reassure ul { margin: 0; padding: 0; }
+    .reassure .check {
+      flex: none;
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
+      margin-top: 1px;
+    }
+    .reassure .label { color: var(--text-muted); font-size: 13px; line-height: 1.45; }
+    .reassure .label b { color: var(--text); font-weight: 600; }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      appearance: none;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 22px;
+      border-radius: 12px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: #042b13;
+      box-shadow: 0 10px 28px -10px rgba(34, 197, 94, 0.75);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px -12px rgba(34, 197, 94, 0.85); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--surface-border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    .countdown {
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+    .ring {
+      position: relative;
+      width: 34px;
+      height: 34px;
+      flex: none;
+    }
+    .ring svg { transform: rotate(-90deg); display: block; }
+    .ring .track { stroke: var(--surface-border); }
+    .ring .bar {
+      stroke: var(--accent);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear;
+    }
+    .ring .num {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .countdown a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .countdown a:hover { text-decoration: underline; }
+    .countdown .pause {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--text-faint);
+      font: inherit;
+      font-size: 12.5px;
+      cursor: pointer;
+      padding: 4px 6px;
+    }
+    .countdown .pause:hover { color: var(--text-muted); text-decoration: underline; }
+
+    .footer {
+      margin-top: 26px;
+      font-size: 12.5px;
+      color: var(--text-faint);
+      line-height: 1.5;
+    }
+    .footer a { color: var(--text-muted); }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px) scale(0.985); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); }
+      70%  { box-shadow: 0 0 0 7px rgba(74, 222, 128, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card { animation: none; }
+      .eyebrow .dot { animation: none; }
+      .btn { transition: none; }
+      .ring .bar { transition: none; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="stars"></div>
-        <div class="content">
-            <div class="badge">Brand Rebrand</div>
-            <div class="logo-wrapper">
-                <div class="logo-icon">🔐</div>
-            </div>
-            <h1>Noteqo is now <span class="highlight">Sealed Space</span></h1>
-            <p class="intro">We've embarked on an exciting new chapter with a fresh brand identity that better reflects our vision and values.</p>
-            
-            <p class="context">We're thrilled to introduce Sealed Space, a rebrand that represents our commitment to innovation, security, and delivering exceptional value to our users. This change marks a milestone in our journey and opens new possibilities for growth and improvement.</p>
+  <main class="card" role="main">
+    <span class="eyebrow"><span class="dot" aria-hidden="true"></span> We've rebranded</span>
 
-            <a href="https://sealedspace.com" class="cta-button">
-                <span class="button-text">Visit Sealed Space</span>
-                <span class="button-arrow">→</span>
-            </a>
-            
-            <p class="footer-text">You'll be redirected automatically in <span id="countdown">10</span> seconds...</p>
-        </div>
+    <div class="brands" aria-hidden="true">
+      <span class="brand old">
+        <span class="glyph">n</span>
+        <span class="name">noteqo</span>
+      </span>
+      <span class="arrow">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+      <span class="brand new">
+        <span class="glyph">S</span>
+        <span class="name">SealedSpace</span>
+      </span>
     </div>
-    <script>
-        let seconds = 10;
-        const countdownElement = document.getElementById('countdown');
-        
-        const interval = setInterval(() => {
-            seconds--;
-            countdownElement.textContent = seconds;
-            if (seconds <= 0) {
-                clearInterval(interval);
-                window.location.href = 'https://sealedspace.com';
-            }
-        }, 1000);
-    </script>
+
+    <h1>noteqo is now <span class="accent">SealedSpace</span></h1>
+    <p class="lead">
+      Same private, end-to-end encrypted workspace — new name that says what it is.
+      Everything you rely on has moved to <strong>sealedspace.com</strong>, and we'll take you there automatically.
+    </p>
+
+    <div class="reassure">
+      <ul>
+        <li>
+          <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="label"><b>Your account is the same.</b> Sign in with the same email and password.</span>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="label"><b>All your data is intact.</b> Notes, spaces and files are untouched.</span>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="label"><b>Still zero-knowledge.</b> We never see your content — by design.</span>
+        </li>
+      </ul>
+      <ul>
+        <li>
+          <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="label"><b>Nothing to do.</b> Just update your bookmark to the new home.</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="https://sealedspace.com" id="go">
+        Go to SealedSpace
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a class="btn btn-ghost" href="https://sealedspace.com/login">Sign in</a>
+    </div>
+
+    <div class="countdown" id="countdown">
+      <span class="ring" aria-hidden="true">
+        <svg width="34" height="34" viewBox="0 0 34 34">
+          <circle class="track" cx="17" cy="17" r="15" fill="none" stroke-width="3"/>
+          <circle class="bar" id="ring-bar" cx="17" cy="17" r="15" fill="none" stroke-width="3"/>
+        </svg>
+        <span class="num" id="count-num">8</span>
+      </span>
+      <span>
+        Redirecting to <a href="https://sealedspace.com">sealedspace.com</a>
+        in <span id="count-text">8</span> seconds…
+      </span>
+      <button class="pause" id="pause" type="button">Stay on this page</button>
+    </div>
+
+    <p class="footer">
+      Bookmarked the old address? Please update it to
+      <a href="https://sealedspace.com">sealedspace.com</a>.
+      Questions about the change? Reach us at
+      <a href="mailto:support@sealedspace.com">support@sealedspace.com</a>.
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      var TARGET = "https://sealedspace.com";
+      var SECONDS = 8;
+
+      var remaining = SECONDS;
+      var numEl = document.getElementById("count-num");
+      var textEl = document.getElementById("count-text");
+      var bar = document.getElementById("ring-bar");
+      var pauseBtn = document.getElementById("pause");
+      var countdownWrap = document.getElementById("countdown");
+
+      // Set up the progress ring geometry.
+      var r = 15;
+      var circumference = 2 * Math.PI * r;
+      bar.style.strokeDasharray = circumference.toFixed(2);
+      bar.style.strokeDashoffset = "0";
+
+      var timer = null;
+      var paused = false;
+
+      function render() {
+        numEl.textContent = remaining;
+        textEl.textContent = remaining;
+        var progress = (SECONDS - remaining) / SECONDS;
+        bar.style.strokeDashoffset = (circumference * progress).toFixed(2);
+      }
+
+      function tick() {
+        remaining -= 1;
+        render();
+        if (remaining <= 0) {
+          window.location.replace(TARGET);
+        }
+      }
+
+      function start() {
+        if (timer) return;
+        timer = window.setInterval(tick, 1000);
+      }
+
+      function stop() {
+        if (timer) { window.clearInterval(timer); timer = null; }
+      }
+
+      pauseBtn.addEventListener("click", function () {
+        paused = !paused;
+        if (paused) {
+          stop();
+          countdownWrap.querySelector("span:nth-of-type(1)").nextElementSibling;
+          textEl.parentNode.innerHTML = 'Auto-redirect paused — use the button above whenever you’re ready.';
+          pauseBtn.textContent = "Resume";
+        } else {
+          // Re-resolve a fresh paragraph since we replaced its text on pause.
+          window.location.replace(TARGET);
+        }
+      });
+
+      render();
+      start();
+    })();
+  </script>
 </body>
 </html>
